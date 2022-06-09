@@ -227,7 +227,7 @@ def selmenu03_stats():
                 print("!잘못된 입력!")
 
 def score_format(): #데이터 관리 > 성적 > 수정 (4-1-2)
-    instudent, insubject, inscore = input("> 수정할 데이터(학번, 과목코드, 점수) : ").split()
+    instudent, insubject, inscore = input("> 수정할 데이터 입력(학번, 과목코드, 점수) : ").split()
     removedata = [] #지울 데이터 리스트
     indata = [] #추가할 데이터 리스트
 
@@ -261,7 +261,7 @@ def score_format(): #데이터 관리 > 성적 > 수정 (4-1-2)
         print("일치하는 데이터가 없습니다.")
 
 def score_Additional(): #데이터 관리 > 성적 > 추가 (4-1-3)
-    instudent, insubject, inscore = input("> 추가할 데이터(학번, 과목코드, 점수) : ").split()
+    instudent, insubject, inscore = input("> 추가할 데이터 입력(학번, 과목코드, 점수) : ").split()
     indata = [] #추가할 데이터 리스트
 
     indata.append(instudent)  # 추가(수정)할 데이터 리스트로 받기
@@ -273,7 +273,7 @@ def score_Additional(): #데이터 관리 > 성적 > 추가 (4-1-3)
     print("추가가 완료되었습니다.")
 
 def score_remove(): #데이터 관리 > 성적 > 삭제 (4-1-4)
-    instudent, insubject, inscore = input("> 삭제할 데이터(학번, 과목코드, 점수) : ").split()
+    instudent, insubject, inscore = input("> 삭제할 데이터 입력(학번, 과목코드, 점수) : ").split()
     inremove = [] #삭제할 데이터 리스트
 
     inremove.append(instudent)  # 삭제할 데이터 리스트로 받기
@@ -308,6 +308,79 @@ def up_score(): #데이터 관리 > 성적
         else:
             print("!잘못된 입력!")
 
+def student_format(): #데이터 관리 > 학생 > 수정 (4-2-2)
+    instudent = input("> 학번 입력 : ")
+    removedata_val = []  # 수정 데이터 리스트 값
+
+    if instudent in student: #학생 딕셔너리에 일치하는 데이터가 있는지 확인
+        # 수정할 데이터인지 확인용
+        val = get_student(instudent)
+        sname, deptid = val  # 리스트 언팩킹
+        dname = get_dept(deptid)
+        print("수정할 내용 > 학번: %s  성명: %s  소속학과: %s(%s)" % (instudent, sname, dname, deptid))
+        del student[instudent]  # 확인 후 데이터 삭제
+
+        # 수정할 내용입력(추가)
+        fstudent, fname, fdept = input("수정할 내용입력(학번, 이름, 학과코드) : ").split()
+        removedata_val.append(fname) #수정될 값 리스트로 저장
+        removedata_val.append(fdept)
+
+        student[fstudent] = removedata_val #학생 딕셔너리에 추가
+        print("수정이 완료되었습니다.")
+
+        removedata_val = [] #수정 데이터 리스트 초기화 (중복 방지)
+
+    else:
+        print("일치하는 데이터가 없습니다.")
+
+def student_Additional(): #데이터 관리 > 학생 > 추가 (4-2-3)
+    add_val = []  # 추가 데이터 리스트 값
+    instudent, inname, indept = input("> 추가할 데이터 입력(학번, 이름, 학과코드) : ").split()
+
+    add_val.append(inname)  # 추가될 값 리스트로 저장
+    add_val.append(indept)
+
+    student[instudent] = add_val  # 학생 딕셔너리에 추가
+    print("추가가 완료되었습니다.")
+    add_val = []  # 추가 데이터 리스트 초기화 (중복 방지)
+
+def student_remove(): #데이터 관리 > 학생 > 삭제 (4-2-4)
+    instudent, inname, indept = input("> 삭제할 데이터 입력(학번, 이름, 학과코드) : ").split()
+    remove_val = []  # 삭제할 데이터 리스트
+    remove_data = {} # 딕셔너리
+
+    remove_val.append(inname)  # 삭제할 값 리스트로 저장 (비교를 위해 선언)
+    remove_val.append(indept)
+
+    remove_data[instudent] = remove_val
+    print(remove_data)
+
+    if remove_data.items() in student.items():
+        del student[instudent]
+        print("삭제가 완료되었습니다.")
+        # remove_val = []  # 데이터 리스트 초기화 (중복 방지)
+        # remove_data = {}  # 딕셔너리 초기화 (중복 방지)
+    else:
+        print("일치하는 데이터가 없습니다.")
+
+def up_student(): #데이터 관리 > 학생
+    print("1:검색    2:수정    3:추가    4:삭제   0:복귀")
+    selno = input("<작업 선택> ")
+    if len(selno) == 0 or selno == '0':
+        return
+    if len(selno) >= 0 and type(int(selno)) is int:
+        selno = int(selno)
+        if selno == 1:
+            find_student()
+        elif selno == 2:
+            student_format()
+        elif selno == 3:
+            student_Additional()
+        elif selno == 4:
+            student_remove()
+        else:
+            print("!잘못된 입력!")
+
 def selmenu04_up(): #데이터 관리
     while True:
         print("_"*50)
@@ -320,7 +393,7 @@ def selmenu04_up(): #데이터 관리
             if selno == 1:
                 up_score()
             elif selno == 2:
-                up_task()
+                up_student()
             elif selno == 3:
                 up_task()
             elif selno == 4:
