@@ -3,10 +3,5 @@ student = {'2230001': ['이우주', '30'], '2230002': ['김사랑', '30'], '2230
            '2230009': ['최사랑', '30'], '2230010': ['이보배', '30']}
 
 
-instudent = input("> 학번 입력 : ")
-removedata_val = []  # 지울 데이터 리스트 값
-indata = []  # 추가할 데이터 리스트
-
-if instudent in student: #학생 딕셔너리에 일치하는 데이터가 있는지 확인
-    del student[instudent]
-    print(student)
+fscore = input("> 수정할 성적 데이터 입력(학번, 과목코드, 점수) : ").split() #수정할 내용 받기
+print(fscore)
