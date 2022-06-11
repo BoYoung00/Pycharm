@@ -70,7 +70,7 @@ def selmenu01_find(): #검색 (1)
             else:
                 print("!잘못된 입력!")
 
-def write_stugrade():
+def write_stugrade(): #2-1
     count = 0 #과목 수
     credit = 0 #학점
     avscore = 0 #평균 점수
@@ -88,7 +88,7 @@ def write_stugrade():
     print("   과목명\t  과목코드\t  학점\t  점수\t  등급")
     for dclassof, dsubject, dscore in stscore:  # 학번, 과목코드, 점수
         if dclassof in ingrade:
-            count += 1; #과목 개수 카운트
+            count += 1 #과목 개수 카운트
             if dsubject in subject:
                 dfsubject = get_subject(dsubject) #과목 정보
                 ddsubject, dcredit, dcode, dpname = dfsubject #과목명, 학점, 학과코드, 교수아이디
@@ -102,11 +102,12 @@ def write_stugrade():
                 avscore = avscore + idscore #총 점수 계산
 
     avscore = avscore / count
-    GPA = rating(avscore)
+    ascore = rating(avscore)
+    ascore = get_gpoint(ascore)
     print()
-    print("과목 수 : %d   학점 수 : %d   평균 점수 : %.1f   평점 : %s" %(count, credit, avscore, GPA))
+    print("과목 수 : %d   학점 수 : %d   평균 점수 : %.1f   평점 : %s" %(count, credit, avscore, ascore))
 
-def write_subgrade():
+def write_subgrade(): #2-2
     count = 0 #과목 수
     avscore = 0 #평균 점수
 
@@ -139,6 +140,7 @@ def write_subgrade():
             avscore = avscore + intdscore #점수 합계
     aavscore = avscore / count #점수 평균 구하기
     ascore = rating(aavscore) #평점 구하기
+    ascore = get_gpoint(ascore)
     print()
     print("학생 수 : %d     평균 점수 : %d      평점 : %s" %(count, aavscore, ascore))
 
