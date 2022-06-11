@@ -1,8 +1,21 @@
-a = {}
-with open("test.txt",'r',encoding='UTF-8') as f:
-    for line in f:
-        for i in range(1):
-            k, v1, v2 = line.split()
-            ab = v1, v2
-        a[k] = ab
-print(a)
+# a = 1
+# b = 2
+# c = 3
+# f = []
+#
+# d = a,b,c
+# print(d)
+# for i in range(3):
+#     f.append(d)
+# print(f)
+
+
+import sys
+
+
+sys.stdout = open('test.txt', 'w')
+
+for i in range(10):
+    print(i)
+
+sys.stdout.close()

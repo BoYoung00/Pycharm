@@ -1,4 +1,5 @@
 from score import *
+
 #작업 선택 종류
 SEARCH, LIST, STATS, DATAMG, END = ('1', '2', '3', '4', 'x')
 
@@ -73,7 +74,8 @@ def selmenu01_find(): #검색 (1)
 def write_stugrade(): #2-1
     count = 0 #과목 수
     credit = 0 #학점
-    avscore = 0 #평균 점수
+    avscore = 0 #평균 점수 (총 점수 더하기)
+    rec_save_list = [] #저장할 값 (리스트)
 
     #타이틀 (학번, 성명, 학과)
     ingrade = input("> 학번 : ") #학번
@@ -83,6 +85,8 @@ def write_stugrade(): #2-1
     print("_" * 50)
     print("학번 : %s\t 이름 : %s\t 학과 : %s" %(ingrade, dname, department))
     print()
+    # 데이터 저장
+    rec_title = "학번 : " + ingrade + '\t' "이름 : " + dname + '\t' + "학과 : " + department + '\n'
 
     #리스트 (과목명, 과목코드, 학점, 점수, 등급)
     print("   과목명\t  과목코드\t  학점\t  점수\t  등급")
@@ -95,17 +99,49 @@ def write_stugrade(): #2-1
                 ddscore = rating(dscore)
                 print("%s\t   %s\t   %s\t   %s\t   %s" % (ddsubject, dsubject, dcredit, dscore, ddscore))
 
-    # 테일 (과목 수, 학점 수, 평균 점수, 평점)
-                idcredit = int(dcredit) #학점 int로 변환
-                idscore = int(dscore) #점수 int로 변환
-                credit = credit + idcredit #총 학점 계산
-                avscore = avscore + idscore #총 점수 계산
+                # 데이터 저장
+                data = ddsubject, dsubject, dcredit, dscore, ddscore #데이터 저장을 위한 패킹
+                rec_save_list.append(data)
 
+    # 테일 (과목 수, 학점 수, 평균 점수, 평점)
+                dcredit = int(dcredit) #학점 int로 변환
+                dscore = int(dscore) #점수 int로 변환
+                credit = credit + dcredit #총 학점 계산
+                avscore = avscore + dscore #총 점수 계산
+
+    # 점수, 평점 계산
     avscore = avscore / count
     ascore = rating(avscore)
     ascore = get_gpoint(ascore)
+
+    # 데이터 타입 변경
+    count = str(count)
+    avscore = str(round(avscore, 1))
+    credit = str(credit)
+    ascore = str(ascore)
+
     print()
-    print("과목 수 : %d   학점 수 : %d   평균 점수 : %.1f   평점 : %s" %(count, credit, avscore, ascore))
+    print("과목 수 : %s   학점 수 : %s   평균 점수 : %s   평점 : %s" %(count, credit, avscore, ascore))
+
+    #데이터 저장
+    rec_tael = "과목 수 : " + count + '\t' + "학점 수 : " + credit + '\t' + "평균 점수 : " + avscore + '\t' + "평점 : " + ascore + '\n'
+
+    while 1:
+        print("_" * 50)
+        selno = input("> 내용을 저장하시겠습니까? (1:네   0:아니오) ")
+        if selno == '1' :
+            save_situation_score(rec_title, rec_save_list, rec_tael)
+            print("저장이 완료되었습니다.")
+        elif selno == '0' :
+            break
+        else:
+            print("!잘못된 입력! (1 또는 0을 입력하세요)")
+            continue
+
+    count = 0  # 초기화 (중복 방지용)
+    credit = 0
+    avscore = 0
+    rec_save_list = []
 
 def write_subgrade(): #2-2
     count = 0 #과목 수
@@ -245,9 +281,9 @@ def selmenu03_stats(): #통계 (3)
             else:
                 print("!잘못된 입력!")
 
-def score_format(): #데이터 관리 > 성적 > 수정 (4-1-2)
+def stscore_format(): #데이터 관리 > 성적 > 수정 (4-1-2)
     print("_" * 50)
-    instudent, insubject, inscore = input("> 수정할 성적 데이터 입력(학번, 과목코드, 점수) : ").split()
+    instudent, insubject, inscore = input("> 데이터 입력(학번, 과목코드, 점수) : ").split()
     removedata = [] #지울 데이터 리스트
     indata = [] #추가할 데이터 리스트
 
@@ -256,31 +292,25 @@ def score_format(): #데이터 관리 > 성적 > 수정 (4-1-2)
     removedata.append(inscore)
 
     if removedata in stscore: #성적 리스트에 일치하는 데이터가 있는지 확인
-        print("수정할 성적 데이터 > 학번 : %s   과목코드 : %s    점수 : %s"
-              %(instudent, insubject, inscore)) #수정할 데이터가 맞는지 확인하는 코드
         stscore.remove(removedata)  # 성적 리스트에 데이터 지우기
         # print(stscore) #지운 결과 값
 
-        fstudent, fsubject, fscore = input("> 수정할 성적 데이터 입력(학번, 과목코드, 점수) : ").split() #수정할 내용 받기
+        fstudent, fsubject, fscore = input("> 바뀔 내용 입력(학번, 과목코드, 점수) : ").split() #수정할 내용 받기
         indata.append(fstudent)  # 추가(수정)할 데이터 리스트로 받기
         indata.append(fsubject)
         indata.append(fscore)
 
-        if len(indata[0]) == 6 and len(indata[1]) == 5 and len(indata[2]) == 2:
-            stscore.append(indata)  # 성적 리스트에 추가하기
-            # print(stscore) #수정된 결과 값
-            print("수정이 완료되었습니다.")
-            removedata = []  # 지울 데이터 초기화
-            indata = []  # 추가할 데이터 초기화 (중복 방지)
-        else:
-            print("잘못된 내용입니다.(글자 수) ")
-            removedata = []  # 지울 데이터 초기화
-            indata = []  # 추가할 데이터 초기화 (중복 방지)
+        stscore.append(indata)  # 성적 리스트에 추가하기
+        # print(stscore) #수정된 결과 값
+        print("수정이 완료되었습니다.")
+        save_stscore()
+        removedata = []  # 지울 데이터 초기화
+        indata = []  # 추가할 데이터 초기화 (중복 방지)
     else:
         removedata = [] #지울 데이터 초기화
         print("일치하는 데이터가 없습니다.")
 
-def score_Additional(): #데이터 관리 > 성적 > 추가 (4-1-3)
+def stscore_Additional(): #데이터 관리 > 성적 > 추가 (4-1-3)
     print("_" * 50)
     instudent, insubject, inscore = input("> 추가할 성적 데이터 입력(학번, 과목코드, 점수) : ").split()
     indata = [] #추가할 데이터 리스트
@@ -292,8 +322,9 @@ def score_Additional(): #데이터 관리 > 성적 > 추가 (4-1-3)
     stscore.append(indata)  # 성적 리스트에 추가하기
     # print(stscore) #추가된 결과 값
     print("추가가 완료되었습니다.")
+    save_stscore()
 
-def score_remove(): #데이터 관리 > 성적 > 삭제 (4-1-4)
+def stscore_remove(): #데이터 관리 > 성적 > 삭제 (4-1-4)
     instudent, insubject, inscore = input("> 삭제할 성적 데이터 입력(학번, 과목코드, 점수) : ").split()
     inremove = [] #삭제할 데이터 리스트
 
@@ -305,14 +336,15 @@ def score_remove(): #데이터 관리 > 성적 > 삭제 (4-1-4)
         stscore.remove(inremove)  # 성적 리스트에서 삭제하기
         # print(stscore) #삭제된 결과 값
         print("삭제가 완료되었습니다.")
+        save_stscore()
         inremove = [] #삭제 데이터 초기화 (중복 방지)
-
     else:
         print("일치하는 데이터가 없습니다.")
         inremove = []  # 삭제 데이터 초기화 (중복 방지)
 
-def up_score(): #데이터 관리 > 성적
+def up_stscore(): #데이터 관리 > 성적
     while True:
+        print("_" * 50)
         print("1:검색    2:수정    3:추가    4:삭제   0:복귀")
         selno = input("<작업 선택> ")
         if len(selno) == 0 or selno == '0':
@@ -322,11 +354,11 @@ def up_score(): #데이터 관리 > 성적
             if selno == 1:
                 find_stscore()
             elif selno == 2:
-                score_format()
+                stscore_format()
             elif selno == 3:
-                score_Additional()
+                stscore_Additional()
             elif selno == 4:
-                score_remove()
+                stscore_remove()
             else:
                 print("!잘못된 입력!")
 
@@ -350,7 +382,7 @@ def student_format(): #데이터 관리 > 학생 > 수정 (4-2-2)
 
         student[fstudent] = removedata_val #학생 딕셔너리에 추가
         print("수정이 완료되었습니다.")
-
+        save_student()
         removedata_val = [] #수정 데이터 리스트 초기화 (중복 방지)
 
     else:
@@ -366,6 +398,7 @@ def student_Additional(): #데이터 관리 > 학생 > 추가 (4-2-3)
 
     student[instudent] = add_val  # 학생 딕셔너리에 추가
     print("추가가 완료되었습니다.")
+    save_student()
     add_val = []  # 추가 데이터 리스트 초기화 (중복 방지)
 
 def student_remove(): #데이터 관리 > 학생 > 삭제 (4-2-4)
@@ -379,6 +412,7 @@ def student_remove(): #데이터 관리 > 학생 > 삭제 (4-2-4)
     if instudent in student.keys() and remove_val in student.values():
         del student[instudent]
         print("삭제가 완료되었습니다.")
+        save_student()
     else:
         print("일치하는 데이터가 없습니다.")
 
@@ -421,9 +455,8 @@ def prof_format(): #데이터 관리 > 교수 > 수정 (4-3-2)
 
         prof[fstudent] = removedata_val #교수 딕셔너리에 추가
         print("수정이 완료되었습니다.")
-
         removedata_val = [] #수정 데이터 리스트 초기화 (중복 방지)
-
+        save_prof()
     else:
         print("일치하는 데이터가 없습니다.")
 
@@ -438,6 +471,7 @@ def prof_Additional(): #데이터 관리 > 교수 > 추가 (4-3-3)
     prof[inproid] = add_val  # 학생 딕셔너리에 추가
     print("추가가 완료되었습니다.")
     add_val = []  # 추가 데이터 리스트 초기화 (중복 방지)
+    save_prof()
 
 def prof_remove(): #데이터 관리 > 교수 > 삭제 (4-3-4)
     print("_" * 50)
@@ -450,6 +484,7 @@ def prof_remove(): #데이터 관리 > 교수 > 삭제 (4-3-4)
     if inproid in prof.keys() and remove_val in prof.values():
         del prof[inproid]
         print("삭제가 완료되었습니다.")
+        save_prof()
     else:
         print("일치하는 데이터가 없습니다.")
 
@@ -495,7 +530,7 @@ def subject_format(): #데이터 관리 > 과목 > 수정 (4-4-2)
 
         subject[fsubcode] = removedata_val #과목 딕셔너리에 추가
         print("수정이 완료되었습니다.")
-
+        save_subject()
     else:
         print("일치하는 데이터가 없습니다.")
 
@@ -511,6 +546,7 @@ def subject_Additional(): #데이터 관리 > 과목 > 추가 (4-4-3)
 
     subject[fsubcode] = add_val  # 교수 딕셔너리에 추가
     print("추가가 완료되었습니다.")
+    save_subject()
     add_val = []  # 추가 데이터 리스트 초기화 (중복 방지)
 
 def subject_remove(): #데이터 관리 > 과목 > 삭제 (4-4-4)
@@ -520,6 +556,7 @@ def subject_remove(): #데이터 관리 > 과목 > 삭제 (4-4-4)
     if dsubcode in subject.keys():
         del subject[dsubcode]
         print("삭제가 완료되었습니다.")
+        save_subject()
     else:
         print("일치하는 데이터가 없습니다.")
 
@@ -559,6 +596,7 @@ def dept_format(): #데이터 관리 > 학과 > 수정 (4-5-2)
 
         dept[fcode] = fname #학과 딕셔너리에 추가
         print("수정이 완료되었습니다.")
+        save_dept()
 
     else:
         print("일치하는 데이터가 없습니다.")
@@ -568,7 +606,7 @@ def dept_Additional(): #데이터 관리 > 학과 > 추가 (4-5-3)
     aname, adept = input("추가할 학과 정보 입력(학과명, 학과코드) : ").split()
     dept[adept] = aname
     print("추가가 완료되었습니다.")
-    print(dept)
+    save_dept()
 
 def dept_remove(): #데이터 관리 > 학과 > 삭제 (4-5-4)
     print("_" * 50)
@@ -577,6 +615,7 @@ def dept_remove(): #데이터 관리 > 학과 > 삭제 (4-5-4)
     if ddept in dept.keys():
         del dept[ddept]
         print("삭제가 완료되었습니다.")
+        save_dept()
     else:
         print("일치하는 데이터가 없습니다.")
 
@@ -610,7 +649,7 @@ def selmenu04_up(): #데이터 관리
         if len(selno) >= 0 and type(int(selno)) is int:
             selno = int(selno)
             if selno == 1:
-                up_score()
+                up_stscore()
             elif selno == 2:
                 up_student()
             elif selno == 3:
