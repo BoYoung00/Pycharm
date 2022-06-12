@@ -1,5 +1,15 @@
 import os
 
+#학과 딕셔너리 불러오기
+def read_dept():
+    fpath = os.getcwd()
+    fname = fpath + '\\' + "dept.txt"
+    with open(fname, 'w', encoding='UTF-8') as f:
+        for key, val in dept.items():
+            rec = key + '\t' + val + '\n'
+            f.write(rec)
+
+
 #평점 딕셔너리
 gpoint = {"A+": 4.5, "A": 4.0, "B+": 3.5, "B": 3.0, "C+": 2.5, "C": 2.0, "D+": 1.5, "D": 1.0, "F": 0.0}
 
@@ -93,7 +103,7 @@ def read_dept():
             f.write(rec)
 
 #학생 성적 현황 저장
-def save_situation_score(title, list, teal):
+def save_situation_score_cs(title, list, teal):
     inname = input("> 파일 이름 입력 : ")
     fpath = os.getcwd()
     fname = fpath + '\\' + inname + ".txt"
@@ -107,6 +117,61 @@ def save_situation_score(title, list, teal):
         for subj, subcode, credit, score, dscore in list:
             # print(ddsubject, dsubject, dcredit, dscore, ddscore)
             rec_list = subj + '\t' + subcode + '\t' + credit + '\t' + score + '\t' + dscore + '\n'
+            f.write(rec_list)
+        f.write(anter)
+        f.write(teal)
+        f.write(anter)
+
+# 과목별 성적 현황 저장
+def save_subject_score_cs(title, list, teal):
+    inname = input("> 파일 이름 입력 : ")
+    fpath = os.getcwd()
+    fname = fpath + '\\' + inname + ".txt"
+    list_titel = "학생성명" + '\t' + "학번" + '\t' + "점수" + '\t' + "등급" + '\n'
+    anter = '\n'
+
+    with open(fname, 'a', encoding='UTF-8') as f:
+        f.write(title)
+        f.write(anter)
+        f.write(list_titel)
+        for sname, dclassof, dscore, ddscore in list:
+            rec_list = sname + '\t' + dclassof + '\t' + dscore + '\t' + ddscore + '\n'
+            f.write(rec_list)
+        f.write(anter)
+        f.write(teal)
+        f.write(anter)
+
+# 과목별 성적 통계 저장
+def save_subject_score_stats(title, list):
+    inname = input("> 파일 이름 입력 : ")
+    fpath = os.getcwd()
+    fname = fpath + '\\' + inname + ".txt"
+    list_titel = "     " + "과목명" + '\t' + "  과목코드" + '\t' + "  학점" + '\t' + "  수강생 수" + '\t' + "  평균점수" + '\t' + "  최고점수" + '\t' + "  최저점수" + '\n'
+    anter = '\n'
+
+    with open(fname, 'a', encoding='UTF-8') as f:
+        f.write(title)
+        f.write(anter)
+        f.write(list_titel)
+        for dsubject, scode, dcredit, count, aavscore, maxscore, minscore in list:
+            rec_list = dsubject + '\t' + scode + '\t' + dcredit + '\t' + count + '\t' + aavscore + '\t' + maxscore + '\t' + minscore + '\n'
+            f.write(rec_list)
+        f.write(anter)
+
+# 교수별 과목 통계 저장
+def save_prof_subject_stats(title, list, teal):
+    inname = input("> 파일 이름 입력 : ")
+    fpath = os.getcwd()
+    fname = fpath + '\\' + inname + ".txt"
+    list_titel = "교수아이디" + '\t' + "교수명" + '\t' + "과목명" + '\t' + "학점" + '\t' + "수강생 수" + '\n'
+    anter = '\n'
+
+    with open(fname, 'a', encoding='UTF-8') as f:
+        f.write(title)
+        f.write(anter)
+        f.write(list_titel)
+        for dproid, pname, dsubject, dcredit, count in list:
+            rec_list = dproid + '\t' + pname + '\t' + dsubject + '\t' + dcredit + '\t' + count + '\n'
             f.write(rec_list)
         f.write(anter)
         f.write(teal)
