@@ -132,6 +132,7 @@ def write_stugrade(): #2-1
         if selno == '1' :
             save_situation_score(rec_title, rec_save_list, rec_tael)
             print("저장이 완료되었습니다.")
+            break
         elif selno == '0' :
             break
         else:

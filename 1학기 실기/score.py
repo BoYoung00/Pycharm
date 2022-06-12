@@ -94,21 +94,23 @@ def read_dept():
 
 #학생 성적 현황 저장
 def save_situation_score(title, list, teal):
-    print(title, list, teal)
     inname = input("> 파일 이름 입력 : ")
     fpath = os.getcwd()
     fname = fpath + '\\' + inname + ".txt"
+    list_titel = "     " + "과목명" + '\t\t' + "과목코드" + '\t' + "학점" + '\t' + "점수" + '\t' + "등급" + '\n'
+    anter = '\n'
 
-    result = ""
-    for s in list:
-        result += s + " "
-    print(result)
-    # alist = list.split(',')
-    # with open(fname, 'a', encoding='UTF-8') as f:
-    #     f.write(title)
-    #     for x in alist:
-    #         f.write(x + '\n')
-    #     f.write(teal)
+    with open(fname, 'a', encoding='UTF-8') as f:
+        f.write(title)
+        f.write(anter)
+        f.write(list_titel)
+        for subj, subcode, credit, score, dscore in list:
+            # print(ddsubject, dsubject, dcredit, dscore, ddscore)
+            rec_list = subj + '\t' + subcode + '\t' + credit + '\t' + score + '\t' + dscore + '\n'
+            f.write(rec_list)
+        f.write(anter)
+        f.write(teal)
+        f.write(anter)
 
 def get_student(stid):
     if stid in student.keys():
