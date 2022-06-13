@@ -118,7 +118,6 @@ def write_stugrade(): #2-1
     count = str(count)
     avscore = str(round(avscore, 1))
     credit = str(credit)
-    ascore = str(ascore)
 
     print()
     print("과목 수 : %s   학점 수 : %s   평균 점수 : %s   평점 : %s" %(count, credit, avscore, ascore))
@@ -177,14 +176,13 @@ def write_subgrade(): #2-2
     #테일(학생 수, 평균 점수, 평점)
             intdscore = int(dscore) #점수를 int로 바꿈
             avscore = avscore + intdscore #점수 합계
-    aavscore = avscore / count #점수 평균 구하기
-    ascore = rating(aavscore) #평점 구하기
+    avscore = avscore / count #점수 평균 구하기
+    ascore = rating(avscore) #평점 구하기
     ascore = get_gpoint(ascore)
     print()
     count = str(count)
-    aavscore = str(aavscore)
-    ascore = str(ascore)
-    print("학생 수 : %s     평균 점수 : %s      평점 : %s" %(count, aavscore, ascore))
+    aavscore = str(round(avscore,1))
+    print("학생 수 : %s     평균 점수 : %s      평점 : %s" %(count, avscore, ascore))
     rec_teal = "학생 수 : " + count + '\t' + "평균 점수 : " + aavscore + '\t' + "평점 : " + ascore + '\n'
 
     while 1:
@@ -248,10 +246,10 @@ def stats_subject(): #통계 > 과목별 성적 통계 (3-1)
                     count += 1 #학생 수
             aavscore = avscore / count
             count = str(count)
-            aavscore = str(aavscore)
+            aavscore = str(round(aavscore,1))
             maxscore = str(max(maxscore))
             minscore = str(min(minscore))
-            print("%s\t    %s\t    %s\t     %2s\t         %s\t     %s\t     %s" %(dsubject, scode, dcredit, count, aavscore, maxscore, minscore))
+            print("%s\t    %s\t    %s\t     %2s\t         %s\t     %s\t        %s" %(dsubject, scode, dcredit, count, aavscore, maxscore, minscore))
             data = dsubject, scode, dcredit, count, aavscore, maxscore, minscore
             rec_save_list.append(data)
 
@@ -640,7 +638,7 @@ def dept_format(): #데이터 관리 > 학과 > 수정 (4-5-2)
 
         dept[fcode] = fname #학과 딕셔너리에 추가
         print("수정이 완료되었습니다.")
-        save_dept()
+        save_dept() #파일 저장 함수
 
     else:
         print("일치하는 데이터가 없습니다.")
