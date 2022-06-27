@@ -86,22 +86,21 @@ def read_student():
             val = []
     return student
 
-#성적 리스트 불러오기
-def read_stscore():
+#교수 딕셔너리 불러오기
+def read_prof():
     fpath = os.getcwd()
-    fname = fpath + '\\' + "stscore.txt"
-    stscore = []
+    fname = fpath + '\\' + "prof.txt"
+    prof = {}
     val = []
 
     with open(fname, 'r', encoding='UTF-8') as f:
         for line in f.readlines():
-            dclassof, dsubject, dscore = line.split()
-            val.append(dclassof)
-            val.append(dsubject)
-            val.append(dscore)
-            stscore.append(val)
+            key, name, age = line.split()
+            val.append(name)
+            val.append(age)
+            prof[key] = val
             val = []
-    return stscore
+    return prof
 
 #평점 딕셔너리 불러오기
 def read_gpoint():
@@ -268,6 +267,7 @@ def get_dept(deptid):
     else:
         return ''
 
+#교수 값 찾기
 def get_prof(profid):
     if profid in prof.keys():
         val = prof.get(profid)
