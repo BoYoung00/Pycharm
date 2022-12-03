@@ -89,7 +89,7 @@ def write_stugrade(): #2-1
     rec_title = "학번 : " + ingrade + '\t' "이름 : " + dname + '\t' + "학과 : " + department + '\n'
 
     #리스트 (과목명, 과목코드, 학점, 점수, 등급)
-    print("   과목명\t  과목코드\t  학점\t  점수\t  등급")
+    print("     과목명\t      과목코드\t  학점\t  점수\t  등급")
     for dclassof, dsubject, dscore in stscore:  # 학번, 과목코드, 점수
         if dclassof in ingrade:
             count += 1 #과목 개수 카운트
@@ -97,7 +97,7 @@ def write_stugrade(): #2-1
                 dfsubject = get_subject(dsubject) #과목 정보
                 ddsubject, dcredit, dcode, dpname = dfsubject #과목명, 학점, 학과코드, 교수아이디
                 ddscore = rating(dscore)
-                print("%s\t   %s\t   %s\t   %s\t   %s" % (ddsubject, dsubject, dcredit, dscore, ddscore))
+                print("%8s\t   %s\t   %s\t   %s\t   %s" % (ddsubject, dsubject, dcredit, dscore, ddscore))
 
                 # 데이터 저장
                 data = ddsubject, dsubject, dcredit, dscore, ddscore #데이터 저장을 위한 패킹

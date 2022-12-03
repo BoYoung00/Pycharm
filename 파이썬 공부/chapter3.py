@@ -80,3 +80,8 @@ while a:
     l = a.pop()
     print(2 is l)
 
+# 딕셔너리
+"""
+a['name'] 키가 존재하지 않으면 에러
+a.get('name') 키가 존재하지 않으면 None
+"""
